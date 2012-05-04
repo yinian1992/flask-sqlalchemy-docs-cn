@@ -1,25 +1,23 @@
 .. _quickstart:
 
-Quickstart
+快速入门
 ==========
 
 .. currentmodule:: flask.ext.sqlalchemy
 
-Flask-SQLAlchemy is fun to use, incredibly easy for basic applications, and
-readily extends for larger applications.  For the complete guide, checkout out
-the API documentation on the :class:`SQLAlchemy` class.
+Flask-SQLAlchemy 的使用是有趣的，对于基本应用异常的简单，并且为大型应用扩展也
+是没有困难的。为了完整的指导，签出 API 文档中的 :class:`SQLAlchemy` 类部分。
 
-A Minimal Application
+
+一个最小的应用
 ---------------------
 
-For the common case of having one Flask application all you have to do is
-to create your Flask application, load the configuration of choice and
-then create the :class:`SQLAlchemy` object by passing it the application.
+对于通常情况，只有一个 Flask 应用，你需要做的全部就是创建你的 Flask 应用，
+选择加载你的配置，然后在创建 :class:`SQLALchemy` 时把应用传递给它。
 
-Once created, that object then contains all the functions and helpers
-from both :mod:`sqlalchemy` and :mod:`sqlalchemy.orm`.  Furthermore it
-provides a class called `Model` that is a declarative base which can be
-used to declare models::
+一旦创建，这个对象会包含 :mod:`sqlalchemy` 和 :mod:`sqlalchemy.orm` 中
+的所有函数和助手。此外，它还提供了一个名为 `Model` 的类，用于作为声明
+模型时的 delarative 基类::
 
     from flask import Flask
     from flask.ext.sqlalchemy import SQLAlchemy
@@ -41,40 +39,36 @@ used to declare models::
         def __repr__(self):
             return '<User %r>' % self.username
 
-To create the initial database, just import the `db` object from a
-interactive Python shell and run the
-:meth:`SQLAlchemy.create_all` method to create the
-tables and database:
+要创建初始的数据库，只需要在交互式 Python shell 中导入 `db` 对象并
+调用 :meth:`SQLAlchemy.create_all` 方法来创建表和数据库:
 
 >>> from yourapplication import db
 >>> db.create_all()
 
-Boom, and there is your database.  Now to create some users:
+砰，你的数据库就好了。现在来创建一些用户:
 
 >>> from yourapplication import User
 >>> admin = User('admin', 'admin@example.com')
 >>> guest = User('guest', 'guest@example.com')
 
-But they are not yet in the database, so let's make sure they are:
+但是它们还不在数据库中，所以让我们确保它们被添加进去:
 
 >>> db.session.add(admin)
 >>> db.session.add(guest)
 >>> db.session.commit()
 
-Accessing the data in database is easy as a pie:
+访问数据库中的内容易如反掌:
 
 >>> users = User.query.all()
 [<User u'admin'>, <User u'guest'>]
 >>> admin = User.query.filter_by(username='admin').first()
 <User u'admin'>
 
-Simple Relationships
+简单关系
 --------------------
 
-SQLAlchemy collects to relational databases and what relational databases
-are really good at are relations.  As such, we shall have an example of an
-application that uses two tables that have a relationship to each other::
-
+SQLAlchemy 聚合关系型数据库和关系型数据库善于处理关系的方面。如此，我们
+可以创建一个有两张互相关联的表的应用作为例子::
 
     from datetime import datetime
 
@@ -111,45 +105,43 @@ application that uses two tables that have a relationship to each other::
         def __repr__(self):
             return '<Category %r>' % self.name
 
-First let's create some objects:
+首先让我们创建一些对象:
 
 >>> py = Category('Python')
 >>> p = Post('Hello Python!', 'Python is pretty cool', py)
 >>> db.session.add(py)
 >>> db.session.add(p)
 
-Now because we declared `posts` as dynamic relationship in the backref
-it shows up as query:
+现在因为我们把 `posts` 声明为动态关系，并在反向引用中，它作为查询出现:
 
 >>> py.posts
 <sqlalchemy.orm.dynamic.AppenderBaseQuery object at 0x1027d37d0>
 
-It behaves like a regular query object so we can ask it for all posts that
-are associated with our test “Python” category:
+它的行为与通常的查询对象类似，所以我们可以用它获取与我们测试的“Python”分类
+关联的所有帖子:
 
 >>> py.posts.all()
 [<Post 'Hello Python!'>]
 
 
-Road to Enlightenment
+启蒙之路
 ---------------------
 
-The only things you need to know compared to plain SQLAlchemy are:
+你仅需要知道的与普通 SQLAlchemy 的区别是:
 
-1.  :class:`SQLAlchemy` gives you access to the following things:
+1.  :class:`SQLAlchemy` 允许你访问下面的东西:
+    -   :mod:`sqlalchemy 和 :mod:`sqlalchemy.orm` 模块中的所有函数
+        和类
+    -   一个名为 `session` 的预配置范围会话
+    -   :attr:`~SQLAlchemy.metadata` 属性
+    -   :attr:`~SQLAlchemy.engine` 属性
+    -   :meth:`SQLAlchemy.create_all` 和 :meth:`SQLAlchemy.drop_all`
+        方法，根据模型分别创建和删除表
+    -   一个 :class:`Model` 基类，其实是一个配置好的 delarative 基类
 
-    -   all the functions and classes from :mod:`sqlalchemy` and
-        :mod:`sqlalchemy.orm`
-    -   a preconfigured scoped session called `session`
-    -   the :attr:`~SQLAlchemy.metadata`
-    -   the :attr:`~SQLAlchemy.engine`
-    -   a :meth:`SQLAlchemy.create_all` and :meth:`SQLAlchemy.drop_all`
-        methods to create and drop tables according to the models.
-    -   a :class:`Model` baseclass that is a configured declarative base.
+2.  declarativ 基类 :class:`Model` 的表现得像一个正规的 Python 类，而
+    附加了一个 `query` 属性用于查询模型
+    （ :class:`Model` 和 :class:`BaseQuery` ）
 
-2.  The :class:`Model` declarative base class behaves like a regular
-    Python class but has a `query` attribute attached that can be used to
-    query the model.  (:class:`Model` and :class:`BaseQuery`)
-
-3.  You have to commit the session, but you don't have to remove it at
-    the end of the request, Flask-SQLAlchemy does that for you.
+3.  你必须提交会话，但你不需要在请求的最后移除它， Flask-SQLAlchemy 已
+    经为你这么做了。

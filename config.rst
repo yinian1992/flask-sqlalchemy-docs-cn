@@ -1,80 +1,65 @@
-Configuration
+配置
 =============
 
-The following configuration values exist for Flask-SQLAlchemy.
-Flask-SQLAlchemy loads these values from your main Flask config which can
-be populated in various ways.  Note that some of those cannot be modified
-after the engine was created so make sure to configure as early as
-possible and to not modify them at runtime.
+下面是 Flask-SQLAlchemy 中存在的配置值。 Flask-SQLAlchemy 从你的 Flask
+主配置（可以以多种方式填充）中加载这些值。注意其中的一些在引擎创建后不
+能修改，所以确保尽早配置且不在运行时修改它们。
 
-Configuration Keys
+配置键
 ------------------
 
-A list of configuration keys currently understood by the extension:
+一个该扩展当前理解的配制键清单:
 
 .. tabularcolumns:: |p{6.5cm}|p{8.5cm}|
 
 =============================== =========================================
-``SQLALCHEMY_DATABASE_URI``     The database URI that should be used for
-                                the connection.  Examples:
+``SQLALCHEMY_DATABASE_URI``     用于连接的数据库 URI 。例如:
 
                                 - ``sqlite:////tmp/test.db``
                                 - ``mysql://username:password@server/db``
-``SQLALCHEMY_BINDS``            A dictionary that maps bind keys to
-                                SQLAlchemy connection URIs.  For more
-                                information about binds see :ref:`binds`.
-``SQLALCHEMY_ECHO``             If set to `True` SQLAlchemy will log all
-                                the statements issued to stderr which can
-                                be useful for debugging.
-``SQLALCHEMY_RECORD_QUERIES``   Can be used to explicitly disable or
-                                enable query recording.  Query recording
-                                automatically happens in debug or testing
-                                mode.  See :func:`get_debug_queries` for
-                                more information.
-``SQLALCHEMY_NATIVE_UNICODE``   Can be used to explicitly disable native
-                                unicode support.  This is required for
-                                some database adapters (like PostgreSQL
-                                on some Ubuntu versions) when used with
-                                inproper database defaults that specify
-                                encoding-less databases.
-``SQLALCHEMY_POOL_SIZE``        The size of the database pool.  Defaults
-                                to the engine's default (usually 5)
-``SQLALCHEMY_POOL_TIMEOUT``     Specifies the connection timeout for the
-                                pool.  Defaults to 10.
-``SQLALCHEMY_POOL_RECYCLE``     Number of seconds after which a
-                                connection is automatically recycled.
-                                This is required for MySQL, which removes
-                                connections after 8 hours idle by
-                                default.  Note that Flask-SQLAlchemy
-                                automatically sets this to 2 hours if
-                                MySQL is used.
+``SQLALCHEMY_BINDS``            一个映射 binds 到连接 URI 的字典。更多
+                                binds 的信息见 :ref:`binds` 。
+``SQLALCHEMY_ECHO``             如果设置为 `Ture` ， SQLAlchemy 会记录所有
+                                发给 stderr 的语句，这对调试有用。
+``SQLALCHEMY_RECORD_QUERIES``   可以用于显式地禁用或启用查询记录。查询记录
+                                在调试或测试模式自动启用。更多信息见
+                                :func:`get_debug_queries` 。
+``SQLALCHEMY_NATIVE_UNICODE``   可以用于显式禁用原生 unicode 支持。当使用
+                                不合适的指定无编码的数据库默认值时，这对于
+                                一些数据库适配器是必须的（比如 Ubuntu 上
+                                某些版本的 PostgreSQL ）。
+``SQLALCHEMY_POOL_SIZE``        数据库连接池的大小。默认是引擎默认值（通常
+                                是 5 ）
+``SQLALCHEMY_POOL_TIMEOUT``     设定连接池的连接超时时间。默认是 10 。
+``SQLALCHEMY_POOL_RECYCLE``     多少秒后自动回收连接。这对 MySQL 是必要的，
+                                它默认移除闲置多于 8 小时的连接。注意如果
+                                使用了 MySQL ， Flask-SQLALchemy 自动设定
+                                这个值为 2 小时。
 =============================== =========================================
 
 .. versionadded:: 0.8
-   The ``SQLALCHEMY_NATIVE_UNICODE``, ``SQLALCHEMY_POOL_SIZE``,
-   ``SQLALCHEMY_POOL_TIMEOUT`` and ``SQLALCHEMY_POOL_RECYCLE``
-   configuration keys were added.
+   添加了 `SQLALCHEMY_NATIVE_UNICODE``, ``SQLALCHEMY_POOL_SIZE``,
+   ``SQLALCHEMY_POOL_TIMEOUT`` 和 ``SQLALCHEMY_POOL_RECYCLE``
+   配置键。
+
 
 .. versionadded:: 0.12
-   The ``SQLALCHEMY_BINDS`` configuration key was added.
+   添加了 ``SQLALCHEMY_BINDS`` 配置键。
 
-Connection URI Format
+连接 URI 格式
 ---------------------
 
-For a complete list of connection URIs head over to the SQLAlchemy
-documentation under (`Supported Databases
-<http://www.sqlalchemy.org/docs/core/engines.html>`_).  This here shows
-some common connection strings.
+完整连接 URI 列表请跳转到 SQLAlchemy 下面的文档 (`Supported Databases
+<http://www.sqlalchemy.org/docs/core/engines.html>`_) 。这里给出一些
+常见的连接字符串。
 
-SQLAlchemy indicates the source of an Engine as a URI combined with
-optional keyword arguments to specify options for the Engine. The form of
-the URI is::
+SQLAlchemy 把一个引擎的源表示为一个连同设定引擎选项的可选字符串参数的
+URI 。 URI 的形式是::
 
     dialect+driver://username:password@host:port/database
 
-Many of the parts in the string are optional.  If no driver is specified
-the default one is selected (make sure to *not* include the ``+`` in that
-case).
+该字符串中的许多部分是可选的。如果没有指定驱动器，会选择默认的 （确保不
+在这种情况下包含 ``+`` ）。
 
 Postgres::
 
@@ -88,6 +73,6 @@ Oracle::
 
     oracle://scott:tiger@127.0.0.1:1521/sidname
 
-SQLite (note the four leading slashes)::
+SQLite （注意开头的四个斜线）::
 
     sqlite:////absolute/path/to/foo.db

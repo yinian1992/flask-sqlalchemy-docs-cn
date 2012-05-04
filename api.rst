@@ -3,10 +3,9 @@ API
 
 .. module:: flask.ext.sqlalchemy
 
-This part of the documentation documents all the public classes and
-functions in Flask-SQLAlchemy.
+这部分文档叙述了所有 Flask-SQLAlchemy 中的公共类和函数。
 
-Configuration
+配置
 `````````````
 
 .. autoclass:: SQLAlchemy
@@ -14,9 +13,9 @@ Configuration
 
    .. attribute:: Query
 
-      The :class:`BaseQuery` class.
+      :class:`BaseQuery` 类。
 
-Models
+模型
 ``````
 
 .. autoclass:: Model
@@ -24,38 +23,34 @@ Models
 
    .. attribute:: __bind_key__
 
-      Optionally declares the bind to use.  `None` refers to the default
-      bind.  For more information see :ref:`binds`.
+      可选地声明要使用的 bind 。 `None` 为默认的 bind 。更多信息见
+      :ref:`binds 。
 
 .. autoclass:: BaseQuery
    :members: get, get_or_404, paginate, first_or_404
 
    .. method:: all()
 
-      Return the results represented by this query as a list.  This
-      results in an execution of the underlying query.
+      把此查询的结果返回为一个列表。这会执行底层查询。
 
    .. method:: order_by(*criterion)
 
-      apply one or more ORDER BY criterion to the query and return the
-      newly resulting query.
+      对查询应用一个或更多 ORDER BY 约束，并返回新的结果查询。
 
    .. method:: limit(limit)
 
-      Apply a LIMIT  to the query and return the newly resulting query.
+      对应用一个 LIMIT ，并返回新的结果查询。
 
    .. method:: offset(offset)
 
-      Apply an OFFSET  to the query and return the newly resulting
-      query.
+      对查询应用一个 OFFSET ，并返回新的结果查询。
 
    .. method:: first()
 
-      Return the first result of this query or `None` if the result
-      doesn’t contain any rows.  This results in an execution of the
-      underlying query.
+      返回此查询中的第一个结果，如果结果不包含任何行，返回 `None` 。
+      这会执行底层查询。
 
-Utilities
+实用工具
 `````````
 
 .. autoclass:: Pagination

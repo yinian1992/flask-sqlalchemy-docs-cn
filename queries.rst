@@ -3,71 +3,66 @@
 Select, Insert, Delete
 ======================
 
-Now that you have :ref:`declared models <models>` it's time to query the
-data from the database.  We will be using the model definitions from the
-:ref:`quickstart` chapter.
+现在你已经有了 :ref:`声明好的模型 <models>` ，是时候从数据库查询数据了。
+我们会使用 :ref:`quickstart` 章中的模型定义。
 
-Inserting Records
+
+插入记录
 -----------------
 
-Before we can query something we will have to insert some data.  All your
-models should have a constructor, so make sure to add one if you forgot.
-Constructors are only used by you, not by SQLAlchemy internally so it's
-entirely up to you how you define them.
+在我们查询之前，我们需要先插入。你的所有模型应该会有一个构造函数，如果你
+忘记了，请确保加上一个。不仅是你和 SQLAlchemy 内部使用构造函数，所以这完
+全取决于你如何定义它们。
 
-Inserting data into the database is a three step process:
+向数据库插入数据分为三步:
 
-1.  Create the Python object
-2.  Add it to the session
-3.  Commit the session
+1.  创建 Python 对象
+2.  把它添加到会话
+3.  提交会话
 
-The session here is not the Flask session, but the Flask-SQLAlchemy one.
-It is essentially a beefed up version of a database transaction.  This is
-how it works:
+这里的会话不是 Flask 会话，而是 Flask-SQLAlchemy 会话。这本质上是一个
+数据库事务的加强版本。它的这样工作:
+
 
 >>> from yourapp import User
 >>> me = User('admin', 'admin@example.com')
 >>> db.session.add(me)
 >>> db.session.commit()
 
-Alright, that was not hard.  What happens at what point?  Before you add
-the object to the session, SQLAlchemy basically does not plan on adding it
-to the transaction.  That is good because you can still discard the
-changes.  For example think about creating the post at a page but you only
-want to pass the post to the template for preview rendering instead of
-storing it in the database.
+好吧，这并不难。在哪点发生了什么？在你把对象添加到会话之前， SQLAlchemy
+基本不考虑把它加到事务中。这是正确的，因为你仍然可以放弃更改。比如想象
+在一个页面上创建文章，但是你只想把文章传递给模板来预览渲染，而不是把它
+存进数据库。
 
-The :func:`~sqlalchemy.orm.session.Session.add` function call then adds
-the object.  It will issue an `INSERT` statement for the database but
-because the transaction is still not committed you won't get an ID back
-immediately.  If you do the commit, your user will have an ID:
+:func:`~sqlalchemy.orm.session.Session.add` 会添加对象。它会发出一个
+`INSERT` 语句给数据库，但是由于事务仍然没有提交，你不会立即得到返回的
+ID 。如果你提交，你的用户会有一个 ID:
 
 >>> me.id
 1
 
-Deleting Records
+删除记录
 ----------------
 
-Deleting records is very similar, instead of
-:func:`~sqlalchemy.orm.session.Session.add` use
-:func:`~sqlalchemy.orm.session.Session.delete`:
+删除记录非常类似，用 :func:`~sqlalchemy.orm.session.Session.delete`
+替换 :func:`~sqlalchemy.orm.session.Session.add`:
 
 >>> db.session.delete(me)
 >>> db.session.commit()
 
-Querying Records
+查询记录
 ----------------
 
-So how do we get data back out of our database?  For this purpose
-Flask-SQLAlchemy provides a :attr:`~Model.query` attribute on your
-:class:`Model` class.  When you access it you will get back a new query
-object over all records.  You can then use methods like
-:func:`~sqlalchemy.orm.query.Query.filter` to filter the records before
-you fire the select with :func:`~sqlalchemy.orm.query.Query.all` or
-:func:`~sqlalchemy.orm.query.Query.first`.  If you want to go by
-primary key you can also use :func:`~sqlalchemy.orm.query.Query.get`.
+那么我们如何从数据库中取回数据？为此， Flask-SQLAlchemy 在你的
+:class:`Model` 类上提供了一个 :attr:`~Model.query` 属性。当你访问它
+时，你会得到一个新的针对所有记录的查询对象。你可以使用诸如
+:func:`~sqlalchemy.orm.query.Query.filter` 的方法来在你
+用 :func:`~sqlalchemy.orm.query.Query.all` 或
+:func:`~sqlalchemy.orm.query.Query.first` 发起 select 之前过滤记录。
+如果你想要用主键查询，你也可以使用
+:func:`~sqlalchemy.orm.query.Query.get` 。
 
-The following queries assume following entries in the database:
+下面的查询假设数据库中有如下条目:
 
 =========== =========== =====================
 `id`        `username`  `email`
@@ -76,7 +71,7 @@ The following queries assume following entries in the database:
 3           guest       guest@example.com
 =========== =========== =====================
 
-Retrieve a user by username:
+通过用户名反查用户:
 
 >>> peter = User.query.filter_by(username='peter').first()
 >>> peter.id
@@ -84,43 +79,42 @@ Retrieve a user by username:
 >>> peter.email
 u'peter@example.org'
 
-Same as above but for a non existing username gives `None`:
+与上面的相同，对不存在的用户名返回 `None`:
 
 >>> missing = User.query.filter_by(username='missing').first()
 >>> missing is None
 True
 
-Selecting a bunch of users by a more complex expression:
+以更复杂的表达式选取一些用户:
 
 >>> User.query.filter(User.email.endswith('@example.com')).all()
 [<User u'admin'>, <User u'guest'>]
 
-Ordering users by something:
+以某种规则对用户排序:
 
 >>> User.query.order_by(User.username)
 [<User u'admin'>, <User u'guest'>, <User u'peter'>]
 
-Limiting users:
+限制返回的用户数目:
 
 >>> User.query.limit(1).all()
 [<User u'admin'>]
 
-Getting user by primary key:
+用主键获取用户:
 
 >>> User.query.get(1)
 <User u'admin'>
 
 
-Queries in Views
+在视图中查询
 ----------------
 
-If you write a Flask view function it's often very handy to return a 404
-error for missing entries.  Because this is a very common idiom,
-Flask-SQLAlchemy provides a helper for this exact purpose.  Instead of
-:meth:`~sqlalchemy.orm.query.Query.get` one can use
-:meth:`~Query.get_or_404` and instead of 
-:meth:`~sqlalchemy.orm.query.Query.first` :meth:`~Query.first_or_404`.
-This will raise 404 errors instead of returning `None`::
+当你编写一个 Flask 视图函数，对不存在的条目返回一个 404 错误通常是非常
+方便的。因为这个需求过于普遍， Flask-SQLAlchemy 为这个特定需求提供了一个
+辅助函数。用  :meth:`~Query.get_or_404` 替代
+:meth:`~sqlalchemy.orm.query.Query.get` ,而 :meth:`~Query.first_or_404`
+代替 :meth:`~sqlalchemy.orm.query.Query.first` 。
+这样会抛出一个异常，而不是返回 `None`::
 
     @app.route('/user/<username>')
     def show_user(username):

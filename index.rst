@@ -5,11 +5,9 @@ Flask-SQLAlchemy
 
 .. module:: flask.ext.sqlalchemy
 
-Flask-SQLAlchemy is an extension for `Flask`_ that adds support for
-`SQLAlchemy`_ to your application.  It requires SQLAlchemy 0.6 or
-higher.  It aims to simplify using SQLAlchemy with Flask by providing
-useful defaults and extra helpers that make it easier to accomplish common
-tasks.
+Flask-SQLALchemy 是一个给你的应用添加 `SQLALchemy`_ 支持的 `Flask`_ 扩展。
+它需要 SQLAlchemy 0.6 或更高的版本。它致力于简化在 Flask 中 SQLAlchemy 的
+使用，提供了有用的默认值和额外的助手来更简单地完成日常任务。
 
 .. _SQLAlchemy: http://www.sqlalchemy.org/
 .. _Flask: http://flask.pocoo.org/

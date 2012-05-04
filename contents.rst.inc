@@ -1,8 +1,7 @@
-User's Guide
+用户指南
 ------------
 
-This part of the documentation will show you how to get started in using
-Flask-SQLAlchemy with Flask.
+这部分文档会展示如何在 Flask 中开始使用 Flask-SQLALchemy 。
 
 .. toctree::
    :maxdepth: 2
@@ -15,25 +14,25 @@ Flask-SQLAlchemy with Flask.
    binds
    signals
 
-API Reference
+API 参考
 -------------
 
-If you are looking for information on a specific function, class or
-method, this part of the documentation is for you.
+如果你在寻找一个特定函数、类或方法的信息，那么这部分文档就是给你准备的。
 
 .. toctree::
    :maxdepth: 2
 
    api
 
-Additional Notes
+额外说明
 ----------------
 
-See Flask's license_ for legal information governing this project.
+参阅 Flask 的 license_ 获取支配这个项目的法律信息
 
 .. toctree::
    :maxdepth: 2
 
    changelog
+   glossary
 
 .. _license: http://flask.pocoo.org/docs/license/

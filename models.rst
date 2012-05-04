@@ -2,28 +2,25 @@
 
 .. currentmodule:: flask.ext.sqlalchemy
 
-Declaring Models
+模型声明
 ================
 
-Generally Flask-SQLAlchemy behaves like a properly configured declarative
-base from the :mod:`~sqlalchemy.ext.declarative` extension.  As such we
-recommend reading the SQLAlchemy docs for a full reference.  However the
-most common use cases are also documented here.
+通常， Flask-SQLALchemy 表现得像来自 :mod:`~sqlalchemy.ext.declarative`
+扩展的一个妥善配置的 declarative 基类。如此，我们推荐阅读 SQLAlchemy 文档
+来获取完整的参考。尽管如此，这里会给出最通用的用法。
 
-Things to keep in mind:
+需要记住的事情:
 
--   The baseclass for all your models is called `db.Model`.  It's stored
-    on the SQLAlchemy instance you have to create.  See :ref:`quickstart`
-    for more details.
--   Some parts that are required in SQLAlchemy are optional in
-    Flask-SQLAlchemy.  For instance the table name is automatically set
-    for you unless overridden.  It's derived from the class name converted
-    to lowercase and with “CamelCase” converted to “camel_case”.
+-   你所有模型的基类叫做 `db.Model` 。它存储在你必须创建的 SQLAlchemy 实
+    例上。更多细节见 :ref:`quickstart` 。
+-   一些部分在 SQLAlchemy 中是必须的，而在 Flask-SQLAlchemy 中是可选的。
+    比如表明已经为你自动设置好，除非你重载它。它由小写的类名导出，即
+    “CamelCase” 转换为 “camel_case”。
 
-Simple Example
+简单的例子
 --------------
 
-A very simple example::
+一个非常简单的例子::
 
     class User(db.Model):
         id = db.Column(db.Integer, primary_key=True)
@@ -37,41 +34,36 @@ A very simple example::
         def __repr__(self):
             return '<User %r>' % self.username
 
-Use :class:`~sqlalchemy.Column` to define a column.  The name of the
-column is the name you assign it to.  If you want to use a different name
-in the table you can provide an optional first argument which is a string
-with the desired column name.  Primary keys are marked with
-``primary_key=True``.  Multiple keys can be marked as primary keys in
-which case they become a compound primary key.
+用 :class:`~sqlalchemy.Column` 来定义一个列。类名就是你把赋给的那个变量的
+名字。如果你想要在表中使用不同的名字，你可以提供一个想要的列名的字符串作为
+可选第一个参数。主键用 ``primary_key=Ture`` 标记。可以把多个键标记为主键，
+此时它们作为复合主键。
 
-The types of the column are the first argument to
-:class:`~sqlalchemy.Column`.  You can either provide them directly or call
-them to further specify them (like providing a length).  The following
-types are the most common:
+列的类型是 :class:`~sqlalchemy.Column` 的第一个参数。你可以直接提供它们或
+进一步规定（比如提供一个长度）。下面的类型是最常用的:
+
 
 =================== =====================================
-`Integer`           an integer
-`String` (size)     a string with a maximum length
-`Text`              some longer unicode text
-`DateTime`          date and time expressed as Python
-                    :mod:`~datetime.datetime` object.
-`Float`             stores floating point values
-`Boolean`           stores a boolean value
-`PickleType`        stores a pickled Python object
-`LargeBinary`       stores large arbitrary binary data
+`Integer`           整数
+`String` (size)     有最大长度的字符串
+`Text`              长 unicode 文本
+`DateTime`          表示为 :mod:`~datetime.datetime` 对象
+                    的时间和日期
+`Float`             存储浮点值
+`Boolean`           存储布尔值
+`PickleType`        存储一个持久化 Python 对象
+`LargeBinary`       存储任意大的二进制数据
 =================== =====================================
 
-One-to-Many Relationships
+一对多关系
 -------------------------
 
-The most common relationships are one-to-many relationships.  Because
-relationships are declared before they are established you can use strings
-to refer to classes that are not created yet (for instance if `Person`
-defines a relationship to `Article` which is declared later in the file).
+最常用的关系就是一对多关系。因为关系在它们建立之前就已经声明，你可以使用
+字符串来参考还没有创建的类（比如如果 `Person` 定义了一个到 `Article` 的
+关系，而这个关系在文件的后面才会声明）。
 
-Relationships are expressed with the :func:`~sqlalchemy.orm.relationship`
-function.  However the foreign key has to be separately declared with the
-:class:`sqlalchemy.schema.ForeignKey` class::
+关系用 :func:`~sqlalchemy.orm.relationship` 函数来表示。而外键必须用
+:class:`sqlalchemy.schema.ForeignKey` 来单独声明::
 
     class Person(db.Model):
         id = db.Column(db.Integer, primary_key=True)
@@ -84,33 +76,27 @@ function.  However the foreign key has to be separately declared with the
         email = db.Column(db.String(50))
         person_id = db.Column(db.Integer, db.ForeignKey('person.id'))
 
-What does ``db.relationship()`` do?  That function returns a new property
-that can do multiple things.  In this case we told it to point to the
-`Address` class and load multiple of those.  How does it know that this
-will return more than one address?  Because SQLAlchemy guesses a useful
-default from your declaration.  If you would want to have a one-to-one
-relationship you can pass ``uselist=False`` to
-:func:`~sqlalchemy.orm.relationship`.
+``db.relationship()`` 做了什么？这个函数返回一个可以做许多事情的属性。
+在本案例中，我们让它指向 `Address` 类并加载那些中的多个。它如何知道这
+会返回至少一个地址？因为 SQLALchemy 从你的声明中猜测了一个有用的默认值。
+如果你想要一对一联系，你可以把 ``uselist=False`` 传给
+:func:`~sqlalchemy.orm.relationship` 。
 
-So what do `backref` and `lazy` mean?  `backref` is a simple way to also
-declare a new property on the `Address` class.  You can then also use
-``my_address.person`` to get to the person at that address.  `lazy` defines
-when SQLAlchemy will load the data from the database:
+那么 `backref` 和 `lazy` 意味着什么？ `backref` 是一个同样在 `Address` 类
+上声明新属性的简单方法。你之后也可以用 `my_address.person` 来获取这个地址
+的人。 `lazy` 决定了 SQLAlchemy 什么时候从数据库中加载数据:
 
--   ``'select'`` (which is the default) means that SQLAlchemy will load
-    the data as necessary in one go using a standard select statement.
--   ``'joined'`` tells SQLAlchemy to load the relationship in the same
-    query as the parent using a `JOIN` statement.
--   ``'subquery'`` works like ``'joined'`` but instead SQLAlchemy will
-    use a subquery.
--   ``'dynamic'`` is special and useful if you have may items.  Instead of
-    loading the items SQLAlchemy will return another query object which
-    you can further refine before loading them items.  This is usually
-    what you want if you expect more than a handful of items for this
-    relationship.
+-   ``'select'`` （默认值）意味着 SQLAlchemy 会在使用一个标准 select 语句
+    时一气呵成加载那些数据
+-   ``'joined'`` 让 SQLAlchemy 当父级使用 `JOIN` 语句是，在相同的查询中加
+    载关系。
+-   ``'subquery'`` 类似 ``'joined'`` ，但是 SQLAlchemy 会使用子查询。
+-   ``'dynamic'`` 在你有可能条目时是特别有用的。 SQLAlchemy 会返回另一个查
+    询对象，你可以在加载这些条目时进一步提取。如果不仅想要关系下的少量条目
+    时，这通常是你想要的。
 
-How do you define the lazy status for backrefs?  By using the
-:func:`~sqlalchemy.orm.backref` function::
+你如何为反向引用（backrefs）定义惰性（lazy）状态？使用
+:func:`~sqlalchemy.orm.backref` 函数::
 
     class User(db.Model):
         id = db.Column(db.Integer, primary_key=True)
@@ -118,12 +104,11 @@ How do you define the lazy status for backrefs?  By using the
         addresses = db.relationship('Address',
             backref=db.backref('person', lazy='joined'), lazy='dynamic')
 
-Many-to-Many Relationships
+多对多关系
 --------------------------
 
-If you want to use many-to-many relationships you will need to define a
-helper table that is used for the relationship.  For this helper table it
-is strongly recommended to *not* use a model but an actual table::
+如果你想要用多对多关系，你需要定义一个用于关系的辅助表。对于这个辅助表，
+强烈建议 *不* 使用模型，而是采用一个实际的表::
 
     tags = db.Table('tags',
         db.Column('tag_id', db.Integer, db.ForeignKey('tag.id')),
@@ -138,7 +123,6 @@ is strongly recommended to *not* use a model but an actual table::
     class Tag(db.Model):
         id = db.Column(db.Integer, primary_key=True)
 
-Here we configured `Page.tags` to be a list of tags once loaded because we
-don't expect too many tags per page.  The list of pages per tag
-(`Tag.pages`) however is a dynamic backref.  As mentioned above this means
-that you will get a query object back you can use to fire a select yourself.
+这里我们配置 `Page.tags` 加载后作为标签的列表，因为我们并不期望每页出现
+太多的标签。而每个 tag 的页面列表（ `Tag.pages` ）是一个动态的反向引用。
+正如上面提到的，这意味着你会得到一个可以发起 select 的查询对象。
