@@ -2,11 +2,11 @@
 
 .. currentmodule:: flask.ext.sqlalchemy
 
-用 Binds 使用多数据库
+用 Binds 操作多个数据库
 =============================
 
 从 0.12 开始， Flask-SQLAlchemy 可以容易地连接到多个数据库。为了实现
-这个功能，预配置了 SQLAlchemy 来支持多重“绑定值”。
+这个功能，预配置了 SQLAlchemy 来支持多个“binds”。
 
 什么是 binds ？在 SQLAlchemy 中，一个 bind 是可以执行 SQL 语句 且通常是一
 个连接或引擎的东西。在 Flask-SQLAlchemy 中， bind 总是背后自动为你创建好
