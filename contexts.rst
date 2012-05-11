@@ -33,7 +33,7 @@
 （见 `深入上下文局域变量
 <http://flask.pocoo.org/docs/shell/#diving-into-context-locals>`_ ）。
 
-在一个 nutshell 中，像这样做:
+简而言之，像这样做:
 
 >>> from yourapp import create_app
 >>> app = create_app()
