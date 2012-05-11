@@ -33,7 +33,7 @@
 创建和删除表
 ----------------------------
 
-:meth:`~SQLAlchemy.create_all` 和 :meth:`~SQLAlchemy.drop_all 方法默认作用
+:meth:`~SQLAlchemy.create_all` 和 :meth:`~SQLAlchemy.drop_all` 方法默认作用
 于声明的所有 bind ，包括默认的。这个行为可以通过提供 `bind` 参数来定制。它
 可以是单个 bind 名 、``'__all__'`` 指向所有 binds 或一个 bind 名的列表。默
 认的 bind （ ``SQLALCHEMY_DATABASE_URI`` ）名为 `None`:
@@ -54,7 +54,7 @@
         username = db.Column(db.String(80), unique=True)
 
 bind key 内部存储在表的 `info` 字典中，作为 ``'bind_key'`` 键值。了解这个
-很重要，因为当你想要直接创建一个表对象时，你会需要把它放在那:
+很重要，因为当你想要直接创建一个表对象时，你会需要把它放在那::
 
     user_favorites = db.Table('user_favorites',
         db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
