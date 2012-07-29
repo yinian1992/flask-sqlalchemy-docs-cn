@@ -6,7 +6,7 @@
 .. currentmodule:: flask.ext.sqlalchemy
 
 Flask-SQLAlchemy 的使用是有趣的，对于基本应用异常的简单，并且为大型应用扩展也
-是没有困难的。为了完整的指导，签出 API 文档中的 :class:`SQLAlchemy` 类部分。
+是没有困难的。要完整的指导，请查阅 :class:`SQLAlchemy` 类的 API 文档。
 
 
 一个最小的应用
