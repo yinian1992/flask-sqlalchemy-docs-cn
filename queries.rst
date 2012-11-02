@@ -10,9 +10,9 @@ Select, Insert, Delete
 插入记录
 -----------------
 
-在我们查询之前，我们需要先插入。你的所有模型应该会有一个构造函数，如果你
-忘记了，请确保加上一个。不仅是你和 SQLAlchemy 内部使用构造函数，所以这完
-全取决于你如何定义它们。
+在我们查询之前，我们需要先插入。你的所有模型都应该有一个构造函数，如果你
+忘记了，请确保加上一个。只有你自己使用这些构造函数而 SQLAlchemy 在内部不会使用它，
+所以如何定义这些构造函数完全取决与你。
 
 向数据库插入数据分为三步:
 
@@ -21,7 +21,7 @@ Select, Insert, Delete
 3.  提交会话
 
 这里的会话不是 Flask 会话，而是 Flask-SQLAlchemy 会话。这本质上是一个
-数据库事务的加强版本。它的这样工作:
+数据库事务的加强版本。它是这样工作的:
 
 
 >>> from yourapp import User
@@ -55,12 +55,10 @@ ID 。如果你提交，你的用户会有一个 ID:
 
 那么我们如何从数据库中取回数据？为此， Flask-SQLAlchemy 在你的
 :class:`Model` 类上提供了一个 :attr:`~Model.query` 属性。当你访问它
-时，你会得到一个新的针对所有记录的查询对象。你可以使用诸如
-:func:`~sqlalchemy.orm.query.Query.filter` 的方法来在你
-用 :func:`~sqlalchemy.orm.query.Query.all` 或
-:func:`~sqlalchemy.orm.query.Query.first` 发起 select 之前过滤记录。
-如果你想要用主键查询，你也可以使用
-:func:`~sqlalchemy.orm.query.Query.get` 。
+时，你会得到一个新的针对所有记录的查询对象。在你使用:func:`~sqlalchemy.orm.query.Query.all` 
+或:func:`~sqlalchemy.orm.query.Query.first` 发起 select 之前
+你可以使用诸如:func:`~sqlalchemy.orm.query.Query.filter` 的方法来过滤记录。
+如果你想要用主键查询，你也可以使用:func:`~sqlalchemy.orm.query.Query.get` 。
 
 下面的查询假设数据库中有如下条目:
 
