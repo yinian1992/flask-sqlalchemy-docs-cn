@@ -14,8 +14,8 @@
    和操作描述符以 ``(model, operation)`` 形式作为元组，这样的元组列表传
    递给接受者的 `changes` 参数。
 
-   该模型时发送到数据库的模型实例，当一个模型已经插入，操作是 ``insert``
-   ，而已删除是 ``delete`` ，如果更新了任何列，会是 ``update`` 。
+   该模型是发送到数据库的模型实例，当一个模型已经插入，操作是 ``'insert'``
+   ，而已删除是 ``'delete'`` ，如果更新了任何列，会是 ``'update'`` 。
 
 .. data:: before_models_committed
 
