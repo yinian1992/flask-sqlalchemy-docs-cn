@@ -130,6 +130,7 @@ SQLAlchemy 聚合关系型数据库和关系型数据库善于处理关系的方
 你仅需要知道的与普通 SQLAlchemy 的区别是:
 
 1.  :class:`SQLAlchemy` 允许你访问下面的东西:
+
     -   :mod:`sqlalchemy` 和 :mod:`sqlalchemy.orm` 模块中的所有函数
         和类
     -   一个名为 `session` 的预配置范围会话
