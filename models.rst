@@ -14,7 +14,7 @@
 -   你所有模型的基类叫做 `db.Model` 。它存储在你必须创建的 SQLAlchemy 实
     例上。更多细节见 :ref:`quickstart` 。
 -   一些部分在 SQLAlchemy 中是必须的，而在 Flask-SQLAlchemy 中是可选的。
-    比如表明已经为你自动设置好，除非你重载它。它由小写的类名导出，即
+    比如表名已经为你自动设置好，除非你重载它。它由小写的类名导出，即
     “CamelCase” 转换为 “camel_case”。
 
 简单的例子

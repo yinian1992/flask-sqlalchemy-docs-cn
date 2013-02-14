@@ -46,7 +46,7 @@
 引用 Binds
 ------------------
 
-当你你声明模型，你可以用 :attr:`~Model.__bind_key__` 属性指定 bind::
+当你声明模型时，你可以用 :attr:`~Model.__bind_key__` 属性指定 bind::
 
     class User(db.Model):
         __bind_key__ = 'users'
